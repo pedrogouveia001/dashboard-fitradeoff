@@ -163,8 +163,7 @@ function setupEventListeners() {
   const varFilter = document.getElementById("variant-filter");
   if (varFilter) varFilter.addEventListener("change", handleFilterChange);
   
-  const exportBtn = document.getElementById("export-csv-btn");
-  if (exportBtn) exportBtn.addEventListener("click", exportToCSV);
+
   
   const syncBtn = document.getElementById("sync-action-btn");
   if (syncBtn) syncBtn.addEventListener("click", triggerOpenAlexSync);

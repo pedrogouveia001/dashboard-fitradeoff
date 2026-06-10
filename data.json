@@ -5346,5 +5346,26 @@
     "authorOrcids": {
       "Cássia Taisy Alencar De Andrade": "https://orcid.org/0000-0001-7191-0165"
     }
+  },
+  {
+    "rawText": "OpenAlex ID: https://openalex.org/W4390125010",
+    "authors": [
+      "Ana Lúcia Pegetti",
+      "Glayse Ferreira Perroni Da Silva",
+      "Mischel Carmen Neyra Belderrain"
+    ],
+    "authorsRaw": "Ana Lúcia Pegetti; Glayse Ferreira Perroni da Silva; Mischel Carmen Neyra Belderrain",
+    "year": 2019,
+    "title": "APLICAÇÃO DO MÉTODO FITRADEOFF PARA A SELEÇÃO DE FORNECEDORES PARA O SERVIÇO DE LIMPEZA E CONSERVAÇÃO",
+    "journal": "Anais do Simpósio Brasileiro de Pesquisa Operacional",
+    "details": "",
+    "link": "https://doi.org/10.59254/sbpo-2019-107011",
+    "variant": "Aplicação Geral/Extensão",
+    "decisionContext": "Decisão Individual",
+    "economyArea": "Logística",
+    "country": "Não Especificado",
+    "authorOrcids": {
+      "Mischel Carmen Neyra Belderrain": "https://orcid.org/0000-0002-5582-4977"
+    }
   }
 ]
