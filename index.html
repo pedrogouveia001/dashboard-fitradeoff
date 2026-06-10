@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Bibliométrico FITradeoff – Portal Científico</title>
+  <meta name="description" content="Portal científico de literatura acadêmica para o método FITradeoff com parsing determinístico, linha do tempo rigorosa e rede de coautoria.">
+  <link rel="stylesheet" href="index.css">
+  
+  <!-- Visualization Libraries via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson@3" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  
+  <!-- Application Logic -->
+  <script src="sample-data.js" defer></script>
+  <script src="parser.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body class="dark-theme">
+
+  <!-- Top Header Navigation Bar (Premium Benchmarked Layout) -->
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <h1>FITradeoff <span class="logo-highlight">Scientific Portal</span></h1>
+      </div>
+    </div>
+    
+    <nav class="header-nav" aria-label="Navegação Principal">
+      <button class="nav-tab-btn active" data-tab="dashboard-tab">
+        <span>Painel Geral</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="network-tab">
+        <span>Rede de Coautoria</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="repository-tab">
+        <span>Repositório</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="admin-tab">
+        <span>Gerenciar Dados</span>
+      </button>
+    </nav>
+    
+    <div class="header-actions">
+      <!-- Theme Switcher Button -->
+      <button id="theme-toggle-btn" class="btn-theme-toggle" title="Alternar Tema (Claro / Escuro)">
+        <span class="theme-icon-light">☀️</span>
+        <span class="theme-icon-dark">🌙</span>
+      </button>
+      <span class="header-badge">Ground-Truth FITradeoff</span>
+    </div>
+  </header>
+
+  <!-- App Body Container -->
+  <div class="app-content">
+    
+    <!-- Top Summary Metrics Grid (Visible on primary tabs) -->
+    <section class="summary-grid" aria-label="Métricas Principais">
+      <div class="metric-card card-glow-blue">
+        <div class="metric-title">Papers Catalogados</div>
+        <div class="metric-value" id="metric-total">0</div>
+      </div>
+      <div class="metric-card card-glow-purple">
+        <div class="metric-title">Autores Únicos</div>
+        <div class="metric-value" id="metric-authors">0</div>
+      </div>
+      <div class="metric-card card-glow-cyan">
+        <div class="metric-title">Periódicos (Journals)</div>
+        <div class="metric-value" id="metric-journals">0</div>
+      </div>
+      <div class="metric-card card-glow-green">
+        <div class="metric-title">Setores da Economia</div>
+        <div class="metric-value" id="metric-sectors-count">13</div>
+      </div>
+      <div class="metric-card card-glow-orange" id="card-failed">
+        <div class="metric-title">Aguardando Revisão</div>
+        <div class="metric-value" id="metric-failed">0</div>
+      </div>
+    </section>
+
+    <!-- MAIN TABS CONTAINER -->
+    <main class="main-content">
+      
+      <!-- Tab 1: Dashboard Geral -->
+      <section id="dashboard-tab" class="tab-content active" aria-label="Painel de Visualização Geral">
+        <div class="dashboard-grid">
+          
+          <!-- Column 1: Sectors and Context -->
+          <div class="dashboard-column">
+            <!-- Economic Area Distribution -->
+            <div class="chart-box">
+              <h2 class="chart-title">
+                Distribuição por Setores da Economia
+                <span class="chart-subtitle">Volume de publicações de aplicação prática nos 13 setores</span>
+              </h2>
+              <div style="position: relative; height: 260px;">
+                <canvas id="area-chart"></canvas>
+              </div>
+            </div>
+            
+            <!-- Social Context -->
+            <div class="chart-box">
+              <h2 class="chart-title">
+                Contexto Social da Decisão
+                <span class="chart-subtitle">Proporção de decisões individuais, em grupo e negociações</span>
+              </h2>
+              <div style="position: relative; height: 180px; width: 100%; display: flex; justify-content: center;">
+                <div style="height: 180px; width: 280px;">
+                  <canvas id="context-chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Column 2: Journals and Timeline -->
+          <div class="dashboard-column">
+            <!-- Journal Distribution -->
+            <div class="chart-box">
+              <h2 class="chart-title">
+                Ranking de Periódicos (Journals)
+                <span class="chart-subtitle">Publicações nos periódicos científicos mais frequentes (Top 10)</span>
+              </h2>
+              <div style="position: relative; height: 200px;">
+                <canvas id="journal-chart"></canvas>
+              </div>
+            </div>
+            
+            <!-- Metodological Timeline -->
+            <div class="chart-box">
+              <h2 class="chart-title">
+                Linha do Tempo Metodológica e Marcos Seminais
+                <span class="chart-subtitle">Variações e extensões do FITradeoff no tempo</span>
+              </h2>
+              <div id="timeline-scroll-container" class="timeline-scroll"></div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- Tab 2: Co-authorship Network (Split Screen layout like Connected Papers) -->
+      <section id="network-tab" class="tab-content" aria-label="Rede de Coautoria e Perfis">
+        <div class="network-split-layout">
+          
+          <!-- Left Column: Author Profile Panel -->
+          <aside class="author-profile-panel" id="author-panel">
+            <div class="panel-header">
+              <h3>Perfil Científico do Autor</h3>
+            </div>
+            
+            <!-- Default Placeholder State -->
+            <div id="author-profile-placeholder" class="author-placeholder">
+              <div class="placeholder-icon">👤</div>
+              <p>Selecione um nó de autor na rede de coautoria para visualizar suas estatísticas detalhadas, conexões e publicações.</p>
+            </div>
+            
+            <!-- Dynamic Profile Content (Hidden by default) -->
+            <div id="author-profile-content" class="author-content" style="display: none;">
+              <div class="profile-header">
+                <h4 id="prof-name">Almeida, A. T.</h4>
+                <div class="profile-badges">
+                  <a id="prof-lattes-link" href="#" target="_blank" class="badge-link lattes-badge">Buscar Currículo Lattes</a>
+                  <a id="prof-orcid-link" href="#" target="_blank" class="badge-link orcid-badge" style="display: none;">Perfil ORCID</a>
+                </div>
+              </div>
+              
+              <!-- Automatic Bibliometric Bio -->
+              <div class="profile-bio" id="prof-bio">
+                Carregando resumo...
+              </div>
+              
+              <!-- Quick Stats Grid -->
+              <div class="profile-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Total de Artigos</span>
+                  <span class="stat-val" id="prof-stat-count">0</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Primeiro Artigo</span>
+                  <span class="stat-val" id="prof-stat-first">2016</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Setor Principal</span>
+                  <span class="stat-val" id="prof-stat-sector">-</span>
+                </div>
+              </div>
+              
+              <!-- Collaborators and Publications -->
+              <div class="profile-lists">
+                <div class="list-section">
+                  <h5>Principais Colaboradores (Coautores)</h5>
+                  <ul id="prof-collaborators" class="collaborators-list">
+                    <!-- Populated dynamically -->
+                  </ul>
+                </div>
+                
+                <div class="list-section">
+                  <h5>Publicações neste escopo</h5>
+                  <div class="prof-pub-scroll">
+                    <ul id="prof-publications" class="publications-list">
+                      <!-- Populated dynamically -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+          
+          <!-- Right/Center Column: D3 Graph Network Container -->
+          <div class="network-graph-area">
+            <div class="network-box">
+              <div class="network-box-header">
+                <div class="network-title-group">
+                  <h4>Grafo de Coautoria e Conexões</h4>
+                  <span class="subtitle-text">Tamanho do nó = volume de papers; arestas = publicações em comum. Clique em um autor para abrir seu perfil lateral.</span>
+                </div>
+                <!-- Network Zoom Controls -->
+                <div class="zoom-controls">
+                  <button class="zoom-btn" id="network-zoom-in" title="Aumentar Zoom">+</button>
+                  <button class="zoom-btn" id="network-zoom-out" title="Diminuir Zoom">-</button>
+                  <button class="zoom-btn" id="network-zoom-reset" title="Resetar Zoom">⟲</button>
+                </div>
+              </div>
+              <div id="network-svg-container" class="network-svg-container">
+                <!-- SVG injected via D3 -->
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- Tab 3: General Repository Table -->
+      <section id="repository-tab" class="tab-content" aria-label="Repositório Geral de Artigos">
+        <div class="section-box">
+          <div class="repository-header">
+            <h2 class="section-title">Repositório de Artigos Higienizados</h2>
+            <button id="export-csv-btn" class="btn-primary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Exportar CSV (.CSV)
+            </button>
+          </div>
+          
+          <!-- Filters Bar -->
+          <div class="filters-bar">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-input" class="search-input" placeholder="Buscar por Título, Autor, Journal ou Área..." aria-label="Pesquisa global de artigos">
+            </div>
+            
+            <select id="variant-filter" class="select-input" aria-label="Filtrar por variante metodológica">
+              <option value="all">Todas as Variantes</option>
+            </select>
+          </div>
+          
+          <!-- Data Table -->
+          <div class="table-container">
+            <table id="repository-table">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">Autores</th>
+                  <th style="width: 8%;">Ano</th>
+                  <th style="width: 38%;">Título</th>
+                  <th style="width: 14%;">Variante</th>
+                  <th style="width: 12%;">Área/Setor</th>
+                  <th style="width: 3%;">Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Table Pagination Controls -->
+          <div class="pagination-container">
+            <div class="pagination-info">
+              Mostrando <span id="pagination-start">0</span>-<span id="pagination-end">0</span> de <span id="pagination-total">0</span> artigos
+            </div>
+            <div class="pagination-right">
+              <label for="page-size-select" class="page-size-label">Itens por página:</label>
+              <select id="page-size-select" class="select-input page-size-select">
+                <option value="10">10</option>
+                <option value="25" selected>25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              <div class="pagination-buttons">
+                <button class="pagination-btn" id="prev-page-btn" title="Página Anterior">❮</button>
+                <span id="current-page-indicator" class="page-indicator">Pág. 1 de 1</span>
+                <button class="pagination-btn" id="next-page-btn" title="Próxima Página">❯</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Tab 4: Admin / Gerenciar Dados -->
+      <section id="admin-tab" class="tab-content" aria-label="Gerenciamento de Dados e Sincronização">
+        <div class="admin-grid">
+          
+          <!-- Left Column: Raw Import Paste -->
+          <div class="admin-column">
+            <div class="section-box">
+              <h2 class="section-title">Importar Publicações Brutas</h2>
+              <div class="input-area">
+                <div class="input-instructions">
+                  Cole abaixo o conteúdo em HTML ou texto simples da página de publicações do site oficial <strong>fitradeoff.org/publications</strong> para higienizar e catalogar:
+                </div>
+                
+                <textarea id="paste-area" class="paste-area" placeholder="Cole o código HTML ou texto das referências aqui..." aria-label="Área para colar publicações brutas"></textarea>
+                
+                <div class="input-actions">
+                  <button id="load-sample-btn" class="btn-secondary">Carregar Amostra Inicial</button>
+                  <button id="process-btn" class="btn-primary">Processar e Atualizar Localmente</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Manual Review Failed Table -->
+            <div class="section-box review-box" style="border-color: var(--color-error);">
+              <h2 class="section-title" style="color: var(--color-error);">
+                Erros de Importação / Revisão Manual
+                <span class="section-subtitle">Linhas rejeitadas para garantir a integridade de dados (Anti-Hallucination Layer)</span>
+              </h2>
+              
+              <div class="review-banner">
+                Qualquer linha de citação sem estrutura determinística óbvia (ex: sem ano identificável) é enviada para esta lista para evitar a geração de metadados fantasmas.
+              </div>
+              
+              <div class="table-container">
+                <table id="failed-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 60%;">Texto Bruto Recebido</th>
+                      <th style="width: 40%;">Erro Identificado no Parser</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Populated via JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column: Sincronização Automática / Estado do Servidor -->
+          <div class="admin-column">
+            <div class="section-box">
+              <h2 class="section-title">Atualização e Sincronização Automática</h2>
+              
+              <div class="sync-panel-card">
+                <div class="sync-main-info">
+                  <div class="sync-indicator-group">
+                    <span class="status-indicator-dot online pulsing" id="sync-indicator"></span>
+                    <span id="sync-status-text" class="status-title">Buscando atualizações automaticamente...</span>
+                  </div>
+                  <div id="last-sync-time" class="sync-timestamp">Último sync: Carregando...</div>
+                </div>
+                
+                <p class="sync-desc">
+                  O sistema roda uma rotina automática em segundo plano que varre e mescla o site oficial <strong>fitradeoff.org</strong> e a base internacional <strong>OpenAlex API</strong>.
+                </p>
+                
+                <button id="sync-action-btn" class="btn-sync-trigger">
+                  <span class="btn-sync-icon" id="sync-icon">🔄</span>
+                  <span id="sync-btn-text">Sincronizar Bases Agora</span>
+                </button>
+              </div>
+              
+              <div class="about-card">
+                <h5>FITradeoff Bibliometric DSS</h5>
+                <p>Desenvolvido por <a href="https://github.com/pedrogouveia001" target="_blank" style="color: var(--accent-blue); text-decoration: none; font-weight: 600;">Pedro Henrique Gouveia de Souza</a> - Universidade Federal de Pernambuco (UFPE).</p>
+                <div class="about-logos">
+                  <a href="https://github.com/pedrogouveia001" target="_blank" class="logo-badge" style="text-decoration: none; color: var(--text-secondary);">GitHub Profile</a>
+                  <span class="logo-badge">FITradeoff Method</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+      
+    </main>
+    
+  </div>
+
+  <!-- Footer Info -->
+  <footer class="app-footer">
+    <span>Desenvolvido por <a href="https://github.com/pedrogouveia001" target="_blank" style="color: var(--accent-blue); text-decoration: none; font-weight: 600;">Pedro Gouveia</a> © 2026</span>
+    <span>Zero-Hallucination Framework v2.0</span>
+  </footer>
+
+</body>
+</html>
