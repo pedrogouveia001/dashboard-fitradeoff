@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCDM/MCDA learning roadmap</title>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <div class="app-container" id="app-container">
+    
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <div class="logo-section">
+        <div class="logo-icon">M</div>
+        <span class="logo-text">MCDM Roadmap</span>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li>
+            <div class="nav-item active" data-view="roadmap" id="nav-roadmap">
+              <i class="fa-solid fa-route"></i>
+              <span data-key="nav_roadmap">Trilha de Aprendizado</span>
+            </div>
+          </li>
+          <li>
+            <div class="nav-item" data-view="timeline" id="nav-timeline">
+              <i class="fa-solid fa-timeline"></i>
+              <span data-key="nav_timeline">Linha do Tempo</span>
+            </div>
+          </li>
+          <li>
+            <div class="nav-item" data-view="classes" id="nav-classes">
+              <i class="fa-solid fa-video"></i>
+              <span data-key="nav_classes">Videoaulas & Aulas</span>
+            </div>
+          </li>
+          <li>
+            <div class="nav-item" data-view="authors" id="nav-authors">
+              <i class="fa-solid fa-users"></i>
+              <span data-key="nav_authors">Rede de Autores</span>
+            </div>
+          </li>
+          <li>
+            <div class="nav-item" data-view="journals" id="nav-journals">
+              <i class="fa-solid fa-book-open"></i>
+              <span data-key="nav_journals">Periódicos & Redes</span>
+            </div>
+          </li>
+          <li>
+            <div class="nav-item" data-view="sync" id="nav-sync">
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span data-key="nav_sync">Pesquisa & Atualização</span>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <!-- User Account Profile Widget -->
+        <div class="user-profile-widget" id="user-profile-widget">
+          <div id="logged-out-section">
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-key="sidebar_intro_auth">Salve seu progresso</p>
+            <button class="btn btn-primary auth-submit-btn" style="padding: 0.5rem;" id="sidebar-login-btn">
+              <i class="fa-solid fa-right-to-bracket"></i> <span data-key="btn_login">Entrar / Cadastrar</span>
+            </button>
+          </div>
+          <div id="logged-in-section" style="display: none;">
+            <div class="user-email-display" id="user-email-display">user@example.com</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); margin: 0.35rem 0;" id="user-progress-percent">
+              Progresso: 0% (0/20)
+            </div>
+            <div class="auth-btn-group">
+              <button class="btn btn-secondary" style="padding: 0.4rem; font-size: 0.75rem;" id="logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i> <span data-key="btn_logout">Sair</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Controls: Language and Theme -->
+        <div class="controls-group" style="justify-content: space-between;">
+          <button class="lang-select-btn" id="lang-toggle-btn">
+            <i class="fa-solid fa-globe"></i>
+            <span id="lang-label">EN</span>
+          </button>
+          <button class="toggle-btn" id="theme-toggle-btn">
+            <i class="fa-solid fa-sun" id="theme-icon"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <main class="main-content">
+      
+      <!-- Top Title Bar -->
+      <header class="top-header">
+        <div class="page-title">
+          <h1 id="main-title" data-key="title_roadmap">Trilha de Decisão Multicritério</h1>
+          <p id="main-subtitle" data-key="subtitle_roadmap">Guia completo para explorar conceitos, métodos e fronteiras de pesquisa de MCDM/MCDA.</p>
+        </div>
+      </header>
+
+      <!-- ==================== VIEW 1: ROADMAP ==================== -->
+      <section class="view-section active" id="roadmap-view">
+        <div class="roadmap-legend">
+          <div class="legend-item">
+            <span class="legend-color color-ns"></span>
+            <span data-key="legend_ns">Não Iniciado</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color color-ip"></span>
+            <span data-key="legend_ip">Em Progresso</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color color-co"></span>
+            <span data-key="legend_co">Concluído</span>
+          </div>
+        </div>
+
+        <div class="roadmap-flow" id="roadmap-flow-container">
+          <!-- Roadmap Level Groups will be injected by JavaScript -->
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 5: TIMELINE ==================== -->
+      <section class="view-section" id="timeline-view">
+        <h2 style="margin-bottom: 1rem;" data-key="timeline_title">Linha do Tempo de MCDM/MCDA</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2.5rem;" data-key="timeline_subtitle">Evolução histórica dos principais marcos, teorias e métodos que estruturaram a ciência de decisão multicritério.</p>
+        
+        <div class="timeline-container" id="timeline-flow">
+          <!-- Injected by JavaScript -->
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 6: VIDEO CLASSES ==================== -->
+      <section class="view-section" id="classes-view">
+        <h2 style="margin-bottom: 1rem;" data-key="classes_title">Videoaulas e Tutoriais Prescritivos</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2.5rem;" data-key="classes_subtitle">Aprenda a fundamentação e a aplicação prática de métodos como FITradeoff, AHP e BWM diretamente com as aulas dos autores e pesquisadores da área.</p>
+        
+        <div class="classes-grid" id="classes-grid-container">
+          <!-- Injected by JavaScript -->
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 2: AUTHORS NETWORK ==================== -->
+      <section class="view-section" id="authors-view">
+        <div class="authors-network">
+          <h2 data-key="authors_net_title">Rede Global de Autores</h2>
+          <p class="network-desc" data-key="authors_net_desc">O desenvolvimento da ciência de decisões multicritério é moldado por pioneiros históricos europeus e norte-americanos, consolida-se em hubs globais de pesquisa (como o CDSID no Brasil) e expande-se com jovens pesquisadores de destaque.</p>
+          
+          <h3 class="author-category-title" data-key="auth_cat_pioneers">Pioneiros Históricos</h3>
+          <div class="authors-grid" id="pioneers-grid">
+            <!-- Dynamic inject -->
+          </div>
+
+          <h3 class="author-category-title" data-key="auth_cat_young">Pesquisadores Promissores e Contemporâneos</h3>
+          <div class="authors-grid" id="young-grid">
+            <!-- Dynamic inject -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 3: JOURNALS & COMMUNITIES ==================== -->
+      <section class="view-section" id="journals-view">
+        <h2 style="margin-bottom: 1rem;" data-key="journals_title">Principais Periódicos Acadêmicos</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;" data-key="journals_subtitle">Periódicos internacionais com maior impacto na publicação de teorias, métodos e aplicações de MCDM/MCDA.</p>
+        
+        <div class="table-responsive">
+          <table class="journals-table">
+            <thead>
+              <tr>
+                <th data-key="th_journal">Periódico</th>
+                <th data-key="th_publisher">Editora</th>
+                <th data-key="th_if">Fator de Impacto</th>
+                <th data-key="th_sjr">SJR Q-Ranking</th>
+                <th data-key="th_hindex">H-Index (Scimago)</th>
+              </tr>
+            </thead>
+            <tbody id="journals-table-body">
+              <!-- Injected by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <h2 style="margin-bottom: 1.5rem;" data-key="comm_title">Comunidades Científicas e Grupos</h2>
+        <div class="communities-container" id="communities-grid">
+          <!-- Injected by JavaScript -->
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 4: LIVE RESEARCH SYNC & STATS ==================== -->
+      <section class="view-section" id="sync-view">
+        <h2 style="margin-bottom: 1.5rem;" data-key="sync_title">Monitoramento de Pesquisa e Estatísticas</h2>
+        
+        <div class="sync-panel-layout">
+          <!-- Sidebar sync info -->
+          <div class="sync-status-card">
+            <div>
+              <div class="sync-stat-number" id="stats-total-articles">0</div>
+              <div class="sync-stat-label" data-key="stat_cached_lbl">Artigos Recentes Mapeados</div>
+            </div>
+            
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-key="sync_info_txt">
+              O roadmap atualiza-se conectando-se diretamente à base do <strong>OpenAlex API</strong>. Ele puxa publicações recentes com as palavras-chave da área e calcula estatísticas de pesquisa moderna automaticamente.
+            </p>
+
+            <button class="btn btn-primary" id="trigger-sync-btn">
+              <i class="fa-solid fa-arrows-rotate"></i> <span data-key="btn_sync_now">Sincronizar OpenAlex</span>
+            </button>
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center;" id="last-sync-time">
+              Última atualização: Pendente
+            </div>
+          </div>
+
+          <!-- Main feed and charts -->
+          <div class="articles-feed-container">
+            <h3 style="margin-bottom: 1.5rem; font-size: 1.3rem;" data-key="feed_title">Publicações Recentes da Área (2024+)</h3>
+            
+            <div class="articles-list" id="articles-feed-list">
+              <!-- Injected by JavaScript -->
+              <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                <p data-key="feed_loading">Buscando banco de dados...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== SIDE DRAWER PANEL ==================== -->
+    <div class="drawer-backdrop" id="drawer-backdrop"></div>
+    <div class="drawer" id="drawer">
+      <div class="drawer-header">
+        <div>
+          <span class="drawer-meta-badge" id="drawer-level-badge">Foundations</span>
+          <h2 class="drawer-title" id="drawer-title">Node Title</h2>
+        </div>
+        <button class="drawer-close" id="drawer-close-btn">&times;</button>
+      </div>
+
+      <div class="drawer-meta-section">
+        <span class="drawer-meta-badge"><i class="fa-solid fa-tag"></i> <span id="drawer-branch-badge">Preference</span></span>
+        <span class="drawer-meta-badge"><i class="fa-solid fa-brain"></i> <span id="drawer-info-badge">Complete Info</span></span>
+      </div>
+
+      <div class="drawer-content">
+        <div>
+          <h4 class="drawer-section-title" data-key="dr_sec_desc">Conceito e Explicação</h4>
+          <p class="drawer-body-text" id="drawer-description">Detailed description</p>
+        </div>
+
+        <div id="drawer-formula-section">
+          <h4 class="drawer-section-title" data-key="dr_sec_math">Estrutura Matemática / Elicitação</h4>
+          <div class="equation-box" id="drawer-equation">E = w_i * x_i</div>
+        </div>
+
+        <div id="drawer-video-section" style="display: none; margin-bottom: 1.5rem;">
+          <h4 class="drawer-section-title" data-key="dr_sec_video">Videoaula do Tópico</h4>
+          <div class="video-iframe-container" id="drawer-video-container">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <div>
+          <h4 class="drawer-section-title" data-key="dr_sec_authors">Autores Chave</h4>
+          <p class="drawer-body-text" id="drawer-authors">Key Authors</p>
+        </div>
+
+        <div>
+          <h4 class="drawer-section-title" data-key="dr_sec_readings">Leituras Recomendadas</h4>
+          <ul class="readings-list" id="drawer-readings-list">
+            <!-- Dynamic inject -->
+          </ul>
+        </div>
+
+        <div id="drawer-research-section" style="margin-top: 1.5rem; display: none;">
+          <h4 class="drawer-section-title" data-key="dr_sec_research">Pesquisa Recente no OpenAlex</h4>
+          <ul class="readings-list" id="drawer-research-list" style="max-height: 250px; overflow-y: auto; padding-right: 0.5rem;">
+            <!-- Dynamic inject -->
+          </ul>
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <div class="drawer-status-title" data-key="dr_status_title">Seu progresso neste tópico:</div>
+        <div class="drawer-status-buttons">
+          <button class="status-opt-btn ns active" data-status="not_started">
+            <span data-key="btn_ns">Não Iniciado</span>
+          </button>
+          <button class="status-opt-btn ip" data-status="in_progress">
+            <span data-key="btn_ip">Em Progresso</span>
+          </button>
+          <button class="status-opt-btn co" data-status="completed">
+            <span data-key="btn_co">Concluído</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== AUTHENTICATION MODAL ==================== -->
+    <div class="modal-backdrop" id="auth-modal-backdrop">
+      <div class="auth-modal">
+        <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+        <h2 class="modal-title" id="auth-modal-title" data-key="modal_login_title">Acessar Guia de Estudos</h2>
+        <p class="modal-subtitle" id="auth-modal-subtitle" data-key="modal_login_subtitle">Entre ou crie uma conta para salvar seu progresso no roadmap e customizar sua trilha.</p>
+        
+        <form id="auth-form">
+          <div class="form-group">
+            <label class="form-label" for="auth-email">E-mail</label>
+            <input class="form-input" type="email" id="auth-email" required placeholder="seu.email@exemplo.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="auth-password" data-key="form_pwd">Senha</label>
+            <input class="form-input" type="password" id="auth-password" required placeholder="******" minlength="6">
+          </div>
+          
+          <button class="btn btn-primary auth-submit-btn" type="submit" id="auth-submit-btn">
+            <span data-key="btn_login">Entrar</span>
+          </button>
+        </form>
+
+        <div class="auth-toggle-msg">
+          <span id="auth-toggle-text" data-key="modal_toggle_txt">Ainda não tem uma conta?</span> 
+          <span class="auth-toggle-link" id="auth-toggle-link" data-key="modal_toggle_lnk">Cadastre-se</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+  </div>
+
+  <!-- Main Frontend Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
