@@ -1,5 +1,0 @@
-node_modules/
-data_fallback/users.json
-data_fallback/progress.json
-.DS_Store
-*.log
